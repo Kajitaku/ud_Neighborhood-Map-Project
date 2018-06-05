@@ -22,14 +22,26 @@
       height: 500px;
     }
 
-    .sidebar, #map {
+    .sidebar {
       height: 100%;
+    }
+
+    #map {
+      max-height: 1500px;
+      height: 120vw;
     }
 
     .providers {
       height: 100%;
       overflow: scroll;
     }
+    @media (min-width: 575px) {
+  .collapse.dont-collapse-sm {
+    display: block;
+    height: auto !important;
+    visibility: visible;
+  }
+}
   </style>
 </head>
 
@@ -51,12 +63,14 @@
         </select>
     </form>
   </nav>
-  <div class="row h-100">
-    <aside class="sidebar col-sm-3">
-      <input type="text" data-bind="textInput: filter, valueUpdate: keyup" placeholder="filter text">
-      <span data-bind="value: filter"></span>
+  <div class="row">
+    <button class="btn btn-primary d-block d-sm-none" type="button" data-toggle="collapse" data-target=".sidebar" aria-expanded="false" aria-controls="sidebar">
+    Providers List
+  </button>
+    <aside class="sidebar col-sm-3 collapse dont-collapse-sm">
+      <input class="filter form-control" type="text" data-bind="textInput: filter, valueUpdate: keyup" placeholder="filter text">
       <ul class="list-group providers" data-bind="foreach: filteredProviders">
-        <li class="list-group-item" data-bind="click: $root.focus, text: title">
+        <li class="list-group-item provider" data-bind="click: $root.focus, text: title">
         </li>
       </ul>
     </aside>

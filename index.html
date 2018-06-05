@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+  <title>Neighborhood Map Project</title>
+  <style>
+    html,
+    body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      height: 500px;
+    }
+
+    .sidebar, #map {
+      height: 100%;
+    }
+
+    .providers {
+      height: 100%;
+      overflow: scroll;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">HIV/AIDS Prevention & Service Provider Location</a>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" id="location" placeholder="Location" aria-label="Search" name='location'>
+      <label for="service">service</label>
+      <select class="form-control" id="service" data-bind="value: service">
+          <option value=""></option>
+          <option value="testing">testing</option>
+          <option value="housing">housing</option>
+          <option value="clinics">clinics</option>
+          <option value="ryanwhite">ryanwhite</option>
+          <option value="mentalhealth">mentalhealth</option>
+          <option value="substanceabuse">substanceabuse</option>
+          <option value="familyplanning">familyplanning</option>
+        </select>
+    </form>
+  </nav>
+  <div class="row h-100">
+    <aside class="sidebar col-sm-3">
+      <input type="text" data-bind="textInput: filter, valueUpdate: keyup" placeholder="filter text">
+      <span data-bind="value: filter"></span>
+      <ul class="list-group providers" data-bind="foreach: filteredProviders">
+        <li class="list-group-item" data-bind="click: $root.focus, text: title">
+        </li>
+      </ul>
+    </aside>
+    <main class="col-sm-9" id="map" data-bind="googlemap: {filter: filter, service: service}">
+    </main>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js'></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBy2nGa_LBbJBMkUc9dn1oE4YFFYg9pjWc&v=3&libraries=places"></script>
+  <script src='js/app.js'></script>
+</body>
+</html>

@@ -68,7 +68,7 @@ let view = {
 
       // add event to pop up infowindow when marker was clicked.
       provider.marker.addListener('click', function() {
-        self.populateInfoWindow(this);
+        self.populateInfoWindow(provider);
       });
     });
 
@@ -92,7 +92,8 @@ let view = {
    * @description populate info window on a marker
    * @param {google.maps.Marker} marker
    */
-  populateInfoWindow: function(marker) {
+  populateInfoWindow: function(provider) {
+    let marker = provider.marker;
     if (this.infowindow.marker != marker) {
 
       // When marker is already clicked and then
@@ -103,6 +104,7 @@ let view = {
         this.infowindow.marker.setIcon(this.defaultIcon);
       }
       this.infowindow.marker = marker;
+      this.infowindow.provider = provider;
       this.infowindow.marker.setIcon(this.blueIcon);
 
       // get a wikipedia image
@@ -222,8 +224,8 @@ let wikipedia = {
       .then(
         function(res) {
           let imageInfo = res.query.pages["-1"].imageinfo;
-          let content = infoWindow.marker.title + '<br><img width=100 height=100 src="' + imageInfo[0].url + '"</img>';
-          infoWindow.setContent(content);
+          let content = '<img width=100 height=100 src="' + imageInfo[0].url + '"</img>';
+          self.setContent(content, infoWindow);
         },
         function(XMLHttpRequest, textStatus, errorThrown) {
           let e;
@@ -232,10 +234,28 @@ let wikipedia = {
           } else if (XMLHttpRequest.status == 404) {
             e = " Wikipedia image info not found.";
           }
-          let content = title + '<br><span>*' + e + '</span>';
-          infoWindow.setContent(content);
+          let content = '<p>' + e + '</p>';
+          self.setContent(content, infoWindow);
         }
       );
+  },
+
+  /**
+   * @description set content to infowindow with a wikipedia image
+   * @param {string} content
+   * @param {google.maps.InfoWindow} infoWindow
+   */
+  setContent: function(content, infoWindow) {
+    let body = '<h3>' + infoWindow.marker.title + '</h3>';
+    body += content;
+    let provider = infoWindow.provider;
+    let url = provider.link;
+    body += '<p> URL: <a href="' + url + '">' + url + '</a></p>';
+    let address = provider.streetAddress + provider.locality;
+    body += '<p> Address: ' + address + '</p>';
+    body += '<p> TEL: ' + provider.telephone + '</p>';
+    body += '<p> TYPE: ' + provider.serviceType + '</p>';
+    infoWindow.setContent(body);
   }
 };
 
@@ -324,7 +344,7 @@ function ProvidersViewModel() {
    */
   self.focus = function(provider) {
     view.centerize(provider);
-    view.populateInfoWindow(provider.marker);
+    view.populateInfoWindow(provider);
   };
 
   /**

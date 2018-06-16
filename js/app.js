@@ -210,24 +210,45 @@ let wikipedia = {
    * @param {google.maps.InfoWindow} infoWindow
    */
   setImage: function(infoWindow) {
-    let title = infoWindow.marker.title;
     let self = this;
+
+    // set current session to avoid async race conditions
+    const currentSession = {};
+    self.lastSession = currentSession;
+
+    let title = infoWindow.marker.title;
     this.getImages(title)
       .then(
         function(images) {
+          // check async race conditions
+          if (self.lastSession !== currentSession) {
+            return;
+          }
           return self.getImageInfo(images[0]);
         },
         function(error) {
+          // check async race conditions
+          if (self.lastSession !== currentSession) {
+            return;
+          }
           throw error;
         }
       )
       .then(
         function(res) {
+          // check async race conditions
+          if (self.lastSession !== currentSession) {
+            return;
+          }
           let imageInfo = res.query.pages["-1"].imageinfo;
           let content = '<img width=100 height=100 src="' + imageInfo[0].url + '"</img>';
           self.setContent(content, infoWindow);
         },
         function(XMLHttpRequest, textStatus, errorThrown) {
+          // check async race conditions
+          if (self.lastSession !== currentSession) {
+            return;
+          }
           let e;
           if (textStatus == undefined) {
             e = XMLHttpRequest

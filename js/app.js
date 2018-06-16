@@ -493,3 +493,11 @@ ko.bindingHandlers.googlemap = {
 };
 
 ko.applyBindings(providersViewModel);
+
+/**
+* @description handling when google map authentication errors.
+*/
+function gm_authFailure() {
+  let msg = 'Can not initialize google map.';
+  alert(msg);
+};

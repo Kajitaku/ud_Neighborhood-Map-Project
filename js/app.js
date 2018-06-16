@@ -90,7 +90,7 @@ let view = {
 
   /**
    * @description populate info window on a marker
-   * @param {google.maps.Marker} marker
+   * @param {object} provider
    */
   populateInfoWindow: function(provider) {
     let marker = provider.marker;
